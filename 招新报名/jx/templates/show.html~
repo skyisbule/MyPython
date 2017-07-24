@@ -1,0 +1,16 @@
+<html>
+<head>
+    <title>周报</title>
+</head>
+<body>
+    {%for i in list%}
+	<ul>
+	<li>{{i.name}}
+	<li>{{i.result}}
+	<li>{{i.problem}}
+	<li>{{i.zj}}
+	</ul>
+    {%endfor%}
+</body>
+</html>
+
