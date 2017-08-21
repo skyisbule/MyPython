@@ -5,6 +5,12 @@ import time
 import sys   
 sys.setrecursionlimit(10000)
 
+'''
+a simple demo:
+get all <a> from a website
+2016.11.2
+'''
+
 pages = set()
 def getLinks(pageurl):
 	global pages
