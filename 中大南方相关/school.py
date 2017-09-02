@@ -15,6 +15,8 @@ head={'Accept':'image/jpeg, application/x-ms-application, image/gif, application
 'Cache-Control':'no-cache'}
 
 
+path=r'C:\Users\Public\login.txt'
+
 def login(id,passwd,ip,flag):
     url = 'http://219.136.125.139/portalAuthAction.do'
     data = {
@@ -31,42 +33,59 @@ def login(id,passwd,ip,flag):
     session = requests.Session()
     response = session.post(url, data=data, headers=head)
     if len(response.text)>300:
-	print("success!!!")
-    print("是否要记住或改变密码？方便下次链接\n是的话输入yes:")
+	print(u"连接成功!!!")
+    else:
+        print(u"连接失败!!!请检查账号密码\n以下为错误信息")
+        print(response.text)
+        exit()
+    print(u"是否要记住或改变密码？方便下次链接\n是的话输入yes:")
     passwd = raw_input("code:")
     if passwd=="yes":
       if flag==1:
-	user = raw_input("您的账号:")
-   	passwd = raw_input("您的密码:")
-      f=open("login.txt","w")
+	user = raw_input("usernum:")
+   	passwd = raw_input("password:")
+      f=open(path,"w")
       f.write(str(id)+"|"+passwd)
       f.close()
-      print("success")
+      print(u"连接成功")
 def run(ip):
-   info=open("login.txt").read().split("|")
+   info=open(path).read().split("|")
    user=info[0]
    passwd=info[1]
    login(user,passwd,ip,1)
+   exit()
+
+def getip():
+    ipList =  socket.gethostbyname_ex(socket.gethostname())[-1]
+    for i in ipList:
+     if '10.' in i:
+      print(u"您的IP是："+i)
+      return i
+    print(u'检测不到宿舍IP')
+
+def init():
+    if os.path.exists(path):
+       if open(path).read()=="":
+           os.remove(path)
+    
    
 
 if __name__ == '__main__':
-   localIP = socket.gethostbyname(socket.gethostname())
-   print("欢迎使用校园网连接器")
-   if os.path.exists('login.txt'):
-        print("1")
+    
+   init()
+   localIP = getip()
+   print(u"是否手动输入ip:yes/no")
+   key = raw_input("code:") 
+   if key=='yes':
+       localIP = raw_input("ip:")
+   if os.path.exists(path):
+     if '|' in open(path).read():
+        print(u"检测到您有保存账号密码")
 	run(localIP)
-   f=open('login.txt','a')
+   f=open(path,'a')
    f.close()
-   print("您的宿舍ip是:"+localIP)
-   print("请输入你的联网账号和密码")
-   user = raw_input("您的账号:")
-   passwd = raw_input("您的密码:")
+   print("youur ip is:"+localIP)
+   print(u"请输入你的联网账号和密码")
+   user = raw_input("your num:")
+   passwd = raw_input('your password:')
    login(user,passwd,localIP,0)
-   
-
-
-
-
-
-
-
